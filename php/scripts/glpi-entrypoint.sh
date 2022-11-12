@@ -1,5 +1,33 @@
 #!/bin/sh
 
+ConfigDir () {
+  dirs=""
+  dirs="${dirs} /usr/share/nginx/html/glpi/config" 
+  dirs="${dirs} /usr/share/nginx/html/glpi/files" 
+  dirs="${dirs} /usr/share/nginx/html/glpi/files/_cache" 
+  dirs="${dirs} /usr/share/nginx/html/glpi/files/_cron" 
+  dirs="${dirs} /usr/share/nginx/html/glpi/files/_dumps" 
+  dirs="${dirs} /usr/share/nginx/html/glpi/files/_graphs" 
+  dirs="${dirs} /usr/share/nginx/html/glpi/files/_locales" 
+  dirs="${dirs} /usr/share/nginx/html/glpi/files/_lock" 
+  dirs="${dirs} /usr/share/nginx/html/glpi/files/_log" 
+  dirs="${dirs} /usr/share/nginx/html/glpi/files/_pictures" 
+  dirs="${dirs} /usr/share/nginx/html/glpi/files/_plugins" 
+  dirs="${dirs} /usr/share/nginx/html/glpi/files/_rss" 
+  dirs="${dirs} /usr/share/nginx/html/glpi/files/_sessions" 
+  dirs="${dirs} /usr/share/nginx/html/glpi/files/_tmp" 
+  dirs="${dirs} /usr/share/nginx/html/glpi/files/_uploads" 
+  dirs="${dirs} /usr/share/nginx/html/glpi/files/_inventories" 
+  
+  for dir in ${dirs}
+  do
+      if [ ! -d ${dir} ]
+      then
+          mkdir ${dir}
+      fi
+  done
+}
+
 ConfigDataBase () {
 
       {
@@ -24,6 +52,7 @@ ConfigOwner () {
 
 }
 
+ConfigDir
 ConfigDataBase
 ConfigOwner
 

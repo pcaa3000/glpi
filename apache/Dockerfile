@@ -2,7 +2,7 @@ FROM centos:7
 
 MAINTAINER eduardo@fametec.com.br
 
-ENV VERSION 9.5.4
+ENV VERSION 9.5.9
 
 ENV GLPI_LANG pt_BR
 
@@ -24,7 +24,7 @@ RUN yum -y install epel-release yum-utils
 
 RUN yum -y install http://rpms.remirepo.net/enterprise/remi-release-7.rpm
 
-RUN yum-config-manager --enable remi-php73
+RUN yum-config-manager --enable remi-php74
 
 RUN yum -y install \
 		bzip2 \
@@ -62,12 +62,12 @@ ADD conf.d /etc/httpd/conf.d
 
 # COPY --chown=apache:apache src/glpi /var/www/html
 
-ADD https://github.com/glpi-project/glpi/releases/download/9.5.4/glpi-9.5.4.tgz /tmp/
+ADD https://github.com/glpi-project/glpi/releases/download/9.5.9/glpi-9.5.9.tgz /tmp/
 #
-RUN tar -zxf /tmp/glpi-9.5.4.tgz -C /tmp/ \
+RUN tar -zxf /tmp/glpi-9.5.9.tgz -C /tmp/ \
 	&& mv /tmp/glpi/* /var/www/html/ \
 	&& chown -R apache:apache /var/www/html \
-	&& rm -rf /tmp/glpi-9.5.4.tgz
+	&& rm -rf /tmp/glpi-9.5.9.tgz
 
 VOLUME [ "/var/www/html/files", "/var/www/html/plugins" ]
 

@@ -1,15 +1,26 @@
 version: "3.5"
 services:
     mariadb-glpi: 
-        image: fametec/glpi:9.5.3-mariadb
+        #build: mariadb/
+        #image: fametec/glpi:10.0.0-mariadb
+        image: mariadb:10 
         restart: unless-stopped
         volumes:
           - mariadb-glpi-volume:/var/lib/mysql:rw
+          - /etc/localtime:/etc/localtime:ro
+          - /etc/timezone:/etc/timezone:ro 
+          - ./mariadb/src/timezones.sql:/docker-entrypoint-initdb.d/1.sql
+          - ./mariadb/src/glpi_user_perm.sql:/docker-entrypoint-initdb.d/2.sql
+          - ./mariadb/src/glpi-9.5.3.sql:/docker-entrypoint-initdb.d/3.sql
+          - ./mariadb/conf:/etc/mysql/conf.d
+          #- ../backups:/opt/backups
         environment: 
           MYSQL_DATABASE: glpi
-          MYSQL_USER: glpi-user 
-          MYSQL_PASSWORD: glpi-pass 
-          MYSQL_RANDOM_ROOT_PASSWORD: 1 
+          MYSQL_USER: ${MYSQL_GLPI_USER}
+          MYSQL_PASSWORD: ${MYSQL_GLPI_PASSWORD}
+          #MYSQL_RANDOM_ROOT_PASSWORD: 1
+          MYSQL_ROOT_PASSWORD: ${MYSQL_GLPI_ROOT_PASSWORD}
+          TZ: America/Lima
 #       ports:
 #         - 3306:3306
         networks: 
@@ -18,33 +29,46 @@ services:
 #
     nginx: 
         build: nginx/
-        image: fametec/glpi:9.5.3-nginx
+        #image: fametec/glpi:9.5.4-nginx
+        image: fametec/glpi:10.0.4-nginx
         restart: unless-stopped
         volumes:
           - glpi-volume-files:/usr/share/nginx/html/glpi/files:rw
           - glpi-volume-plugins:/usr/share/nginx/html/glpi/plugins:rw
+          #- glpi-volume:/usr/share/nginx/html/glpi
+          - ./nginx/conf.d:/etc/nginx/conf.d 
+          - /etc/localtime:/etc/localtime:ro 
+        #environment:
+        #  VERSION_GLPI: "10.0.3"
         depends_on: 
           - mariadb-glpi
-          - php-fpm
+          - glpi
         ports: 
-          - 80:80
+          - 8082:80
         networks: 
           - glpi-frontend
           - glpi-backend
 
-    php-fpm: 
+    glpi: 
         build: php/
-        image: fametec/glpi:9.5.3-php-fpm
+        #image: fametec/glpi:9.5.4-php-fpm
+        image: fametec/glpi:10.0.3-php-fpm
         restart: unless-stopped
         environment:
           MARIADB_HOST: mariadb-glpi
           MARIADB_PORT: 3306
           MARIADB_DATABASE: glpi
-          MARIADB_USER: glpi-user
-          MARIADB_PASSWORD: glpi-pass
+          MARIADB_USER: ${MYSQL_GLPI_USER}
+          MARIADB_PASSWORD: ${MYSQL_GLPI_PASSWORD}
+          TZ: America/Lima
+          #VERSION_GLPI: "10.0.3"
         volumes:
           - glpi-volume-files:/usr/share/nginx/html/glpi/files:rw
           - glpi-volume-plugins:/usr/share/nginx/html/glpi/plugins:rw
+          #- glpi-volume:/usr/share/nginx/html/glpi
+          - ./openldap:/etc/openldap
+          - /etc/timezone:/etc/timezone:ro 
+          - /etc/localtime:/etc/localtime:ro 
         depends_on:
           - mariadb-glpi
         networks:
@@ -56,6 +80,7 @@ networks:
     glpi-backend:
 #
 volumes:
+    #glpi-volume:
     glpi-volume-files:
     glpi-volume-plugins:
     mariadb-glpi-volume:

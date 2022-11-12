@@ -5,7 +5,7 @@ services:
 #
     mariadb-glpi: 
         build: mariadb/
-        image: fametec/glpi:9.5.3-mariadb
+        image: fametec/glpi:9.5.4-mariadb
         restart: unless-stopped
         volumes: 
           - mariadb-glpi-volume:/var/lib/mysql:rw
@@ -15,6 +15,7 @@ services:
           MYSQL_USER: ${MYSQL_GLPI_USER}
           MYSQL_PASSWORD: ${MYSQL_GLPI_PASSWORD}
           MYSQL_RANDOM_ROOT_PASSWORD: 1 
+          #MYSQL_ROOT_PASSWORD: ${MYSQL_GLPI_ROOT_PASSWORD}
         #ports: 
         #  - 3306:3306
         networks: 
@@ -24,7 +25,7 @@ services:
 #
     glpi: 
         build: apache/
-        image: fametec/glpi:9.5.3
+        image: fametec/glpi:9.5.4
         restart: unless-stopped
         volumes: 
           - glpi-volume-files:/var/www/html/files:rw
@@ -37,12 +38,12 @@ services:
           MARIADB_DATABASE: glpi
           MARIADB_USER: ${MYSQL_GLPI_USER}
           MARIADB_PASSWORD: ${MYSQL_GLPI_PASSWORD}
-          VERSION: "9.5.3"
+          VERSION: "9.5.4"
           PLUGINS: "all"
         depends_on: 
           - mariadb-glpi
         ports: 
-          - "8090:80"
+          - "8091:80"
         networks: 
           - glpi-frontend
           - glpi-backend
@@ -51,7 +52,7 @@ services:
 #
     crond: 
         build: crond/
-        image: fametec/glpi:9.5.3-crond
+        image: fametec/glpi:9.5.4-crond
         restart: unless-stopped
         depends_on: 
           - glpi
