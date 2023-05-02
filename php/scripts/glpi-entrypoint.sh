@@ -2,22 +2,22 @@
 
 ConfigDir () {
   dirs=""
-  dirs="${dirs} /usr/share/nginx/html/glpi/config" 
-  dirs="${dirs} /usr/share/nginx/html/glpi/files" 
-  dirs="${dirs} /usr/share/nginx/html/glpi/files/_cache" 
-  dirs="${dirs} /usr/share/nginx/html/glpi/files/_cron" 
-  dirs="${dirs} /usr/share/nginx/html/glpi/files/_dumps" 
-  dirs="${dirs} /usr/share/nginx/html/glpi/files/_graphs" 
-  dirs="${dirs} /usr/share/nginx/html/glpi/files/_locales" 
-  dirs="${dirs} /usr/share/nginx/html/glpi/files/_lock" 
-  dirs="${dirs} /usr/share/nginx/html/glpi/files/_log" 
-  dirs="${dirs} /usr/share/nginx/html/glpi/files/_pictures" 
-  dirs="${dirs} /usr/share/nginx/html/glpi/files/_plugins" 
-  dirs="${dirs} /usr/share/nginx/html/glpi/files/_rss" 
-  dirs="${dirs} /usr/share/nginx/html/glpi/files/_sessions" 
-  dirs="${dirs} /usr/share/nginx/html/glpi/files/_tmp" 
-  dirs="${dirs} /usr/share/nginx/html/glpi/files/_uploads" 
-  dirs="${dirs} /usr/share/nginx/html/glpi/files/_inventories" 
+  dirs="${dirs} /var/glpi/config" 
+  dirs="${dirs} /var/glpi/files" 
+  dirs="${dirs} /var/glpi/files/_cache" 
+  dirs="${dirs} /var/glpi/files/_cron" 
+  dirs="${dirs} /var/glpi/files/_dumps" 
+  dirs="${dirs} /var/glpi/files/_graphs" 
+  dirs="${dirs} /var/glpi/files/_locales" 
+  dirs="${dirs} /var/glpi/files/_lock" 
+  dirs="${dirs} /var/glpi/files/_log" 
+  dirs="${dirs} /var/glpi/files/_pictures" 
+  dirs="${dirs} /var/glpi/files/_plugins" 
+  dirs="${dirs} /var/glpi/files/_rss" 
+  dirs="${dirs} /var/glpi/files/_sessions" 
+  dirs="${dirs} /var/glpi/files/_tmp" 
+  dirs="${dirs} /var/glpi/files/_uploads" 
+  dirs="${dirs} /var/glpi/files/_inventories" 
   
   for dir in ${dirs}
   do
@@ -40,15 +40,17 @@ ConfigDataBase () {
         echo "   public \$dbdefault  = \"${MARIADB_DATABASE}\";"; \
         echo "}"; \
         echo ; 
-      } > /usr/share/nginx/html/glpi/config/config_db.php
+      } > /var/glpi/config/config_db.php
 
 }
 
 ConfigOwner () {
 
+  chown -R www-data:www-data /var/glpi
+  chmod g+w /var/glpi/files
   chown -R www-data:www-data /usr/share/nginx/html/glpi
-  chmod g+w /usr/share/nginx/html/glpi/files
   chmod g+w /usr/share/nginx/html/glpi/plugins
+  chmod g+w /usr/share/nginx/html/glpi/marketplace
 
 }
 

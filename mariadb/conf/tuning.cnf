@@ -76,5 +76,20 @@ innodb_adaptive_hash_index = off
 # Kill iddle connections after 10min
 wait_timeout = 600
 
+# Tweak optimizer
+optimizer_switch='mrr=on'
+optimizer_switch='mrr_cost_based=off'
+
+# Mount datadir onto memory
+# datadir=/dev/shm/mysql
+
+
+[mariadb]
+# Tweak cache/buffers
+join_cache_level=8
+join_buffer_size=8M
+mrr_buffer_size=8M
+
+
 [mysqldump]
 max-allowed-packet = 16M

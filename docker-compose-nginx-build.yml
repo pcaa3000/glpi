@@ -30,10 +30,10 @@ services:
     nginx: 
         build: nginx/
         #image: fametec/glpi:9.5.4-nginx
-        image: fametec/glpi:10.0.4-nginx
+        image: fametec/glpi:10.0.5-nginx
         restart: unless-stopped
         volumes:
-          - glpi-volume-files:/usr/share/nginx/html/glpi/files:rw
+          - glpi-volume-files:/var/glpi/files:rw
           - glpi-volume-plugins:/usr/share/nginx/html/glpi/plugins:rw
           #- glpi-volume:/usr/share/nginx/html/glpi
           - ./nginx/conf.d:/etc/nginx/conf.d 
@@ -52,7 +52,7 @@ services:
     glpi: 
         build: php/
         #image: fametec/glpi:9.5.4-php-fpm
-        image: fametec/glpi:10.0.3-php-fpm
+        image: fametec/glpi:10.0.5-php-fpm
         restart: unless-stopped
         environment:
           MARIADB_HOST: mariadb-glpi
@@ -61,7 +61,7 @@ services:
           MARIADB_USER: ${MYSQL_GLPI_USER}
           MARIADB_PASSWORD: ${MYSQL_GLPI_PASSWORD}
           TZ: America/Lima
-          #VERSION_GLPI: "10.0.3"
+          VERSION_GLPI: "10.0.5"
         volumes:
           - glpi-volume-files:/usr/share/nginx/html/glpi/files:rw
           - glpi-volume-plugins:/usr/share/nginx/html/glpi/plugins:rw

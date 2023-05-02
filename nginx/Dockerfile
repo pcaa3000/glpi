@@ -1,4 +1,5 @@
-FROM fametec/glpi:10.0.4-php-fpm as PHP
+# FROM fametec/glpi:9.5.9-php-fpm as PHP
+FROM fametec/glpi:10.0.5-php-fpm as PHP
 
 FROM nginx:alpine
 
@@ -25,6 +26,7 @@ COPY nginx.conf /etc/nginx/nginx.conf
 
  COPY --from=PHP --chown=www-data:www-data /usr/share/nginx/html/glpi /usr/share/nginx/html/glpi
 
- VOLUME [ "/usr/share/nginx/html/glpi/files", "/usr/share/nginx/html/glpi/plugins" ]
+# VOLUME [ "/usr/share/nginx/html/glpi/files", "/usr/share/nginx/html/glpi/plugins" ]
+    VOLUME [ "/var/glpi", "/usr/share/nginx/html/glpi/plugins" , "/usr/share/nginx/html/glpi/marketplace" ]
 
 EXPOSE 80/tcp
