@@ -1,5 +1,5 @@
 # FROM fametec/glpi:9.5.9-php-fpm as PHP
-FROM fametec/glpi:10.0.5-php-fpm as PHP
+FROM fametec/glpi:10.0.7-php-fpm as PHP
 
 FROM nginx:alpine
 
