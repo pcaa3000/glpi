@@ -3,7 +3,7 @@ services:
     mariadb-glpi: 
         #build: mariadb/
         #image: fametec/glpi:10.0.0-mariadb
-        image: mariadb:10 
+        image: mariadb:10
         restart: unless-stopped
         volumes:
           - mariadb-glpi-volume:/var/lib/mysql:rw
@@ -30,11 +30,13 @@ services:
     nginx: 
         build: nginx/
         #image: fametec/glpi:9.5.4-nginx
-        image: fametec/glpi:10.0.5-nginx
+        image: fametec/glpi:10.0.15-nginx
         restart: unless-stopped
         volumes:
           - glpi-volume-files:/var/glpi/files:rw
+          - glpi-volume-config:/var/glpi/config:rw
           - glpi-volume-plugins:/usr/share/nginx/html/glpi/plugins:rw
+          - glpi-volume-marketplace:/usr/share/nginx/html/glpi/marketplace:rw
           #- glpi-volume:/usr/share/nginx/html/glpi
           - ./nginx/conf.d:/etc/nginx/conf.d 
           - /etc/localtime:/etc/localtime:ro 
@@ -47,12 +49,11 @@ services:
           - 8082:80
         networks: 
           - glpi-frontend
-          - glpi-backend
 
     glpi: 
         build: php/
         #image: fametec/glpi:9.5.4-php-fpm
-        image: fametec/glpi:10.0.5-php-fpm
+        image: fametec/glpi:10.0.15-php-fpm
         restart: unless-stopped
         environment:
           MARIADB_HOST: mariadb-glpi
@@ -61,17 +62,20 @@ services:
           MARIADB_USER: ${MYSQL_GLPI_USER}
           MARIADB_PASSWORD: ${MYSQL_GLPI_PASSWORD}
           TZ: America/Lima
-          VERSION_GLPI: "10.0.5"
+          VERSION_GLPI: "10.0.15"
         volumes:
-          - glpi-volume-files:/usr/share/nginx/html/glpi/files:rw
+          - glpi-volume-files:/var/glpi/files:rw
+          - glpi-volume-config:/var/glpi/config:rw
           - glpi-volume-plugins:/usr/share/nginx/html/glpi/plugins:rw
+          - glpi-volume-marketplace:/usr/share/nginx/html/glpi/marketplace:rw
           #- glpi-volume:/usr/share/nginx/html/glpi
-          - ./openldap:/etc/openldap
+          #- ./openldap:/etc/openldap
           - /etc/timezone:/etc/timezone:ro 
           - /etc/localtime:/etc/localtime:ro 
         depends_on:
           - mariadb-glpi
         networks:
+          - glpi-frontend
           - glpi-backend
 #        ports:
 #          - 9000:9000
@@ -82,5 +86,7 @@ networks:
 volumes:
     #glpi-volume:
     glpi-volume-files:
+    glpi-volume-config:
     glpi-volume-plugins:
+    glpi-volume-marketplace:
     mariadb-glpi-volume:

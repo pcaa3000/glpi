@@ -26,7 +26,7 @@ ENV MARIADB_USER glpi
 
 ENV MARIADB_PASSWORD glpi
 
-ENV VERSION_GLPI 10.0.7
+ENV VERSION_GLPI 10.0.15
 
 
 ARG SRC_GLPI=
@@ -61,7 +61,7 @@ RUN apk update && apk add --update openssl \
   && docker-php-ext-install intl \
   \
   # Install ldap PHP extension.
-  && apk add --virtual .ldap-build-deps openldap-dev \
+  && apk add --virtual .ldap-build-deps openldap-dev openssl-dev \
   && apk add libldap \
   && docker-php-ext-install ldap \
   \
@@ -135,6 +135,7 @@ VOLUME [ "/var/glpi", "/usr/share/nginx/html/glpi/plugins", "/usr/share/nginx/ht
 ENV \
   GLPI_INSTALL_MODE=DOCKER \
   GLPI_CONFIG_DIR=/var/glpi/config \
+  GLPI_ROOT=/usr/share/nginx/html/glpi \
   GLPI_VAR_DIR=/var/glpi/files
 ENV \
   # #Fix "iconv(): Wrong charset, conversion from `us-ascii' to `UTF-8//TRANSLIT' is not allowed".

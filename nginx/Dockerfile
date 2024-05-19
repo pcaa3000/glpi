@@ -1,9 +1,9 @@
 # FROM fametec/glpi:9.5.9-php-fpm as PHP
-FROM fametec/glpi:10.0.7-php-fpm as PHP
+FROM fametec/glpi:10.0.15-php-fpm as PHP
 
 FROM nginx:alpine
 
-MAINTAINER eduardo@fametec.com.br
+LABEL MAINTAINER='pcaa3000@gmail.com'
 
 # ENV VERSION_GLPI 10.0.2
 
